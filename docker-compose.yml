@@ -1,0 +1,65 @@
+version: '3'
+services:
+  zookeeper:
+    container_name: mvtds-transformer-zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: mvtds-transformer-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka-data:/var/run/docker.sock
+  kafka-setup:
+    container_name: mvtds-transformer-kafka-setup
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+      - kafka
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+              cub kafka-ready -b kafka:29092 1 30 && \
+              kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic mvtds-out-nom-key-local && \
+              kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic mvtds-replay-nom-key-local && \
+              kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic first-topic && \
+              kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1 --topic mvtds-sap-nom-key-local'"
+
+  redpanda-console:
+    image: docker.redpanda.com/vectorized/console:master-0a8fce8
+    container_name: redpanda-console
+    restart: always
+    ports:
+      - "9002:8080"
+    environment:
+      KAFKA_BROKERS: kafka:29092
+    depends_on:
+      - kafka
+
+  redpanda-console-enterprise-dev:
+    image: docker.redpanda.com/vectorized/console:master-0a8fce8
+    container_name: redpanda-console-enterprise-dev
+    restart: always
+    ports:
+      - "9008:8080"
+    environment:
+      KAFKA_BROKERS: pkc-nkz7k.southcentralus.azure.confluent.cloud:9092
+      KAFKA_SASL_ENABLED: 1
+      KAFKA_TLS_ENABLED: 1
+      KAFKA_SASL_MECHANISM: PLAIN
+      KAFKA_SASL_USERNAME: I2TMZ5J2UI2U5ETX
+      KAFKA_SASL_PASSWORD: 0XpHDmSmQElV8FaQqeC94ZX3j9h3qhrH+KVMJOdqMtQOyViZvoGpZ6dEQg6ZGPyt
+
+volumes:
+  kafka-data:
+  postgresql-data:

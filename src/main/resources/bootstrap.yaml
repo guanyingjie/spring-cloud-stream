@@ -1,0 +1,16 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    function:
+      definition: consumer;producer
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        producer-out-0:
+          destination: first-topic
+          content-type: application/json
+        consumer-in-0:
+          destination: first-topic
