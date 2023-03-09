@@ -1,16 +1,28 @@
-spring:
-  main:
-    allow-bean-definition-overriding: true
-  cloud:
-    function:
-      definition: consumer;producer
-    stream:
-      kafka:
-        binder:
-          brokers: localhost:9092
-      bindings:
-        producer-out-0:
-          destination: first-topic
-          content-type: application/json
-        consumer-in-0:
-          destination: first-topic
+#spring:
+#  main:
+#    allow-bean-definition-overriding: true
+#  cloud:
+#    stream:
+#      kafka:
+#        bindings:
+#          order-out:
+#            destination: scs-099.order
+#          order-in:
+#            destination: scs-099.order
+##  cloud:
+###    function:
+###      definition: consumer;producer
+##    stream:
+##      kafka:
+##        binder:
+##          brokers: localhost:9092
+##        bindings:
+##          order-out:
+##            destination: first-topic
+##          order-in:
+##            destination: first-topic
+#
+##        producer-out-0:
+##          destination: first-topic
+##        consumer-in-0:
+##          destination: first-topic

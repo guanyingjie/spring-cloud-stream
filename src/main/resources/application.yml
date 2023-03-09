@@ -1,0 +1,4 @@
+spring:
+  cloud.stream.bindings:
+    output.destination: first-topic # Topic Name
+    input.destination: first-topic # Topic Name
