@@ -25,5 +25,6 @@ public class KafkaConsumer {
   public void consumer(@Payload String message) throws InterruptedException {
     Thread.sleep(200);
     log.info("message consumed: {}", message);
+    throw new NullPointerException();
   }
 }

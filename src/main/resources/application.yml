@@ -1,4 +1,18 @@
 spring:
-  cloud.stream.bindings:
-    output.destination: first-topic # Topic Name
-    input.destination: first-topic # Topic Name
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: first-topic # Topic Name
+        input:
+          consumer:
+            max-attempts: 2
+          group: group
+          destination: first-topic # Topic Name
+      kafka:
+        bindings:
+          input:
+            consumer:
+              enableDlq: true
+              dlqName: dlq
+              dlq-partitions: 1
