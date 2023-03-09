@@ -9,18 +9,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 @Slf4j
 public class KafkaConsumer {
 
-//  @Bean
-//  public Consumer<Message<String>> consumer() {
-//    return message -> {
-//      String body = message.getPayload();
-//      MessageHeaders messageHeaders = message.getHeaders();
-//      log.info("Received message, TOPIC: {}; OFFSET:{},Message:{}",
-//          messageHeaders.get(KafkaHeaders.RECEIVED_TOPIC, String.class),
-//          messageHeaders.get(KafkaHeaders.OFFSET, Long.class),
-//          body);
-//    };
-//  }
-
   @StreamListener(MyBinder.INPUT)
   public void consumer(@Payload String message) throws InterruptedException {
     Thread.sleep(200);
