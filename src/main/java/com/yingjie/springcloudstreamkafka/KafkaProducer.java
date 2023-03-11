@@ -1,22 +1,19 @@
 package com.yingjie.springcloudstreamkafka;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Bean;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Supplier;
-
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class KafkaProducer {
-  private final MyBinder myBinder;
+  private final StreamBridge streamBridge;
 
-  public void producer(String content) {
-    myBinder.output().send(MessageBuilder.withPayload(content).build());
+  public void producer(String body) {
+    log.info("producer");
+    streamBridge.send("numberProducer-out-0", body);
   }
 }

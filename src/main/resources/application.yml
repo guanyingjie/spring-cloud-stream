@@ -1,18 +1,23 @@
 spring:
   cloud:
+    function:
+      definition: numberConsumer
     stream:
       bindings:
-        output:
-          destination: first-topic # Topic Name
-        input:
-          consumer:
-            max-attempts: 2
+        numberProducer-out-0:
+          destination: first-topic
+        numberConsumer-in-0:
           group: group
-          destination: first-topic # Topic Name
+          destination: first-topic
       kafka:
+        binder:
+          brokers: localhost:9092
         bindings:
           input:
             consumer:
-              enableDlq: true
+              enableDlq: false
               dlqName: dlq
               dlq-partitions: 1
+#logging:
+#  level:
+#    root: debug
