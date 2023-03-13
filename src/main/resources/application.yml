@@ -10,12 +10,11 @@ spring:
           group: group
           destination: first-topic
       kafka:
-        binder:
-          brokers: localhost:9092
         bindings:
-          input:
+          numberConsumer-in-0:
             consumer:
-              enableDlq: false
+              standard-headers:
+              enableDlq: true
               dlqName: dlq
               dlq-partitions: 1
 #logging:
