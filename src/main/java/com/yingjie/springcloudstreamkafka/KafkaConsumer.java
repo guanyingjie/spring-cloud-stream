@@ -12,7 +12,10 @@ public class KafkaConsumer {
 
   @Bean
   public Consumer<String> numberConsumer() {
-    return message -> log.info("receive message : {}", message);
+    return message -> {
+      log.info("receive message : {}", message);
+      throw new IllegalStateException();
+    };
   }
 
 }
