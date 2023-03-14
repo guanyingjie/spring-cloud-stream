@@ -7,10 +7,15 @@ spring:
         numberProducer-out-0:
           destination: first-topic
         numberConsumer-in-0:
-#          consumer:
-#            max-attempts: 1
           group: group
           destination: first-topic
+          consumer:
+            defaultRetryable: false
+            retryableExceptions:
+              java.lang.RuntimeException: true
+              java.lang.IllegalStateException: false
+            max-attempts: 8
+            back-off-multiplier: 10
       kafka:
         bindings:
           numberConsumer-in-0:
@@ -21,4 +26,6 @@ spring:
               dlq-partitions: 1
 #logging:
 #  level:
-#    root: debug
+#    org:
+#      springframework:
+#        retry: debug

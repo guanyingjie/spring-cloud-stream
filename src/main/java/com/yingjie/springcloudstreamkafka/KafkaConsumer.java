@@ -14,7 +14,10 @@ public class KafkaConsumer {
   public Consumer<String> numberConsumer() {
     return message -> {
       log.info("receive message : {}", message);
-      throw new IllegalStateException();
+      if (message.equals("message")){
+        throw new IllegalStateException();
+      }
+      throw new NullPointerException();
     };
   }
 
